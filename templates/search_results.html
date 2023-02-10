@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script>
+      let currentAudio;
+      function playAudio(audioElement) {
+        if (currentAudio) {
+          currentAudio.pause();
+        }
+        currentAudio = audioElement;
+        currentAudio.play();
+      }
+    </script>
+    <title>Procurar Resultados</title>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h1 class="text-center">Procurar Resultados</h1>
+      <h3 class="text-center">Resultados para "{{ search_term }}":</h3>
+
+      <form action="{{ url_for('search') }}" method="post">
+        <div class="form-group">
+          <input type="text" name="search_term" class="form-control" placeholder="Search for a track...">
+        </div>
+        <button type="submit" class="btn btn-primary">Resultados</button>
+      </form>
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Musica</th>
+            <th>Artista</th>
+            <th>Álbum</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for track in tracks %}
+            <tr>
+              <td>{{ track.title }}</td>
+              <td>{{ track.artist.name }}</td>
+              <td>{{ track.album.title }}</td>
+              <td colspan="3">
+                <audio id="{{ track.id }}" controls onplay="playAudio(this)">
+                  <source src="{{ track.preview }}" type="audio/mpeg">
+                  Your browser does not support the audio element.
+                </audio>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
